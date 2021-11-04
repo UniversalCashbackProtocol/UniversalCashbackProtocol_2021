@@ -1,7 +1,7 @@
 pragma solidity 0.8.0;
 
 
-contract AdminStore{
+contract FabricStore{
     uint private qtyStores;
     
     constructor(){
@@ -14,15 +14,8 @@ contract AdminStore{
         string name;
         uint promotionsQty;
     }
-    
-    struct Promotion{
-        uint id;
-        uint idStore;
-        string name;
-    }
-    
+      
     mapping(uint => Store) stores;
-    mapping(uint => mapping(uint => Promotion)) promotions;
     mapping(address => mapping(uint => Store)) storesByOwner;
     
     function CreateStore(string memory _name) public {
