@@ -35,7 +35,7 @@ contract Store{
     mapping(uint256 => mapping(uint256 => ProductAsigned)) productsInPromotions;
     
     constructor(address _owner, uint256 _id, string memory _nameStore){
-        require(_owner != address(0) && _id > 0, "El address debe ser valido y el Id mayor a 0");
+        require(_owner != address(0) && _id > 0, "address must be valid and Id must be equal or greater than zero");
         id = _id;
         qtyPromotions = 1;
         nameStore = _nameStore;
@@ -44,7 +44,7 @@ contract Store{
     }
     
     function CreateProduct(string memory _SKU, uint256 _priceProduct, uint256 _tokensPerProduct) isOwner public{
-        require(_priceProduct >= 0 && _tokensPerProduct >= 0, "El Precio del producto y los Tokens a asignar deben ser mayor o igual a cero");
+        require(_priceProduct >= 0 && _tokensPerProduct >= 0, "Price product and tokens to be asigned must be equal or greater than zero");
         products[qtyProducts] = Product(qtyProducts, _SKU, _priceProduct, _tokensPerProduct);
         qtyProducts++;
     }
@@ -64,23 +64,23 @@ contract Store{
     }
     
     function UnAssignProductToPromotion(uint _idProduct, uint _idPromotion) isOwner public{
-        require(_idProduct > 0 && _idPromotion > 0, "Deben ser mayor a cero");
+        require(_idProduct > 0 && _idPromotion > 0, "Must be equal or greater than <ero");
         Promotion memory prom = GetPromotionById(_idPromotion);
         Product memory prod = GetProductById(_idProduct);
         productsInPromotions[counterProductsAsigned][prom.id] = ProductAsigned(prod.id, false);
     }
     
     function GetPromotionById(uint256 _id) public view returns (Promotion memory){
-        require(_id > 0, "El Id debe ser mayor a 0");
+        require(_id > 0, "Id must be greater than zero");
         Promotion memory p = promotions[_id];
-        require (p.id > 0, "La promocion ingreasada no existe");
+        require(p.id > 0, "Promotion does not exist");
         return p;
     }
     
     function GetProductById(uint256 _id) public view returns (Product memory){
-        require(_id > 0, "El Id debe ser mayor a 0");
+        require(_id > 0, "Id must be greather than zero");
         Product memory p = products[_id];
-        require(p.id > 0, "El producto no existe");
+        require(p.id > 0, "Product does not exist");
         return p;
     }
     
@@ -97,4 +97,7 @@ contract Store{
         _;
     }
 }
+
+
+
 
