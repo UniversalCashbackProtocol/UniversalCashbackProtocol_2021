@@ -18,12 +18,13 @@ contract UCPToken is ERC20 {
         USDT = ERC20(_USDT);        
     }
 
-    function mintToken(uint256 _amount) external virtual {
+    function mintToken(uint256 _amount) external virtual returns(bool){
         require(contractAllowedToMint[msg.sender] == true, "Must be allowed to mint");
         require(amountAllowedToMint[msg.sender] == _amount, "Can't exceed amount allowed to mint");
         //Reset amount allowed to mint
         //setAddressAllowedToMint(msg.sender, 0);
         _mint(msg.sender, _amount);
+        return true;
     } 
 
     function setAddressAllowedToMint(address _contractAddress, uint256 _amount) external{

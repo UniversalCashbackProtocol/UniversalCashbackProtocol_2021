@@ -12,14 +12,14 @@ describe("Store Contract", function () {
     const AdminProtocol = await hre.ethers.getContractFactory("AdminProtocol");
     
     const usdt = await USD.deploy( ethers.utils.parseEther('1000000'));
-    await usdt.deployed();
-    
-    const adminProtocol = await AdminProtocol.deploy(usdt.address);
-    await adminProtocol.deployed();
-
+    await usdt.deployed();  
 
     const ucp = await UCPToken.deploy(usdt.address);
     await ucp.deployed();
+
+    const adminProtocol = await AdminProtocol.deploy(usdt.address, ucp.address);
+    await adminProtocol.deployed();
+
     const store = await Store.deploy(deployer.address, 1, "McDonalds", usdt.address, ucp.address, adminProtocol.address); 
     
     const contractAmountPrev = await usdt.balanceOf(store.address)

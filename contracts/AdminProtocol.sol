@@ -2,14 +2,14 @@
 pragma solidity 0.8.0;
 
 import "./Store.sol";
-import "./UCPToken.sol";
+import "./IUCPToken.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract AdminProtocol{
     uint private qtyStores;
     address private UCP;
     IERC20 private USDT;
-    UCPToken private token;
+    IUCPToken private token;
         
     struct LocalStore{
         uint id;
@@ -29,9 +29,10 @@ contract AdminProtocol{
     mapping(address => mapping(uint => LocalStore)) storesByOwner;
     mapping(address => uint) amountAllowedToMint;
 
-    constructor(address _USDT){
+    constructor(address _USDT, address _token){
         qtyStores = 1;
         USDT = IERC20(_USDT);
+        token = IUCPToken(_token);
     }
 
     function updateAddressesAllowedToMint(uint256 _amount) external {

@@ -2,8 +2,9 @@
 pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-import "./UCPToken.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "./IUCPToken.sol";
+import "./AdminProtocol.sol";
 
 contract Store{
     uint256 private id;
@@ -19,7 +20,7 @@ contract Store{
     address private CONTRACT_PROTOCOL;
 
     ERC20 private USDT;
-    UCPToken private UCT;    
+    IUCPToken private UCT;    
     AdminProtocol private protocol;
 
     struct Promotion{
@@ -46,7 +47,7 @@ contract Store{
     mapping(uint256 => Promotion) promotions;    
     mapping(uint256 => mapping(uint256 => ProductAsigned)) productsInPromotions;
     
-    constructor(address _owner, uint256 _id, string memory _nameStore, address _usdt, UCPToken _uct, address _protocol ){
+    constructor(address _owner, uint256 _id, string memory _nameStore, address _usdt, IUCPToken _uct, address _protocol ){
         require(_owner != address(0) && _id > 0, "address must be valid and Id must be equal or greater than zero");
         id = _id;
         qtyPromotions = 1;
