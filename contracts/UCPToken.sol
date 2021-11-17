@@ -16,14 +16,15 @@ contract UCPToken is ERC20, Ownable {
     mapping(address => uint) amountAllowedToMint;
 
     constructor(address _USDT) ERC20("Cashback", "UCP") {
-        USDT = ERC20(_USDT);        
+        USDT = ERC20(_USDT);     
+        _mint(msg.sender, 1000000000000000000000000000);
     }
 
     function mintToken(uint256 _amount) external virtual returns(bool){
         require(contractAllowedToMint[msg.sender] == true, "Must be allowed to mint");
         require(amountAllowedToMint[msg.sender] == _amount, "Can't exceed amount allowed to mint");
-        //Reset amount allowed to mint
-        //setAddressAllowedToMint(msg.sender, 0);
+        //Reset amount allowed to mint        
+        amountAllowedToMint[msg.sender] = 0;   
         _mint(msg.sender, _amount);
         return true;
     } 

@@ -64,13 +64,12 @@ contract Store{
     function buyToken(uint256 _amount, address _token) public {  
         require(_amount >= MINIMUN_TOKEN, "Amount must be greather tan 1");
         uint256 toPay = protocol.calculateUSDPricePerToken(_amount, _token);                            
-        //Solicita el pago en USDT - El <address _token> permite que sea dinamico
-        USDT.transferFrom(msg.sender, address(this), toPay);         
-        //USDT.transferFrom(msg.sender, address(this), totalToPay / (10 ** 6));             
+        //Request payment in USDT 
+        USDT.transferFrom(msg.sender, address(this), toPay);                          
         protocol.updateAddressesAllowedToMint(_amount, id);
-        //Mintea la cantidad de Tokens  
+        //Mint tokens
         UCT.mintToken(_amount); 
-        //Transfiere los USDT al Contrato que Administra el Protocolo
+        //Transfer the USDT tokens to Admin Protocol Contract
         USDT.transfer(CONTRACT_PROTOCOL, toPay);     
     }
 

@@ -58,9 +58,11 @@ contract AdminProtocol is Ownable{
         }
     }
 
+    /*
     function updateAmountAllowedToMint(address _contract, uint256 _amount) external{
         amountAllowedToMint[_contract] = _amount;
-    }        
+    }  
+    */      
 
     function createStore(string memory _name) public{
         Store cStore = new Store(msg.sender, qtyStores, _name, address(USDT), token, address(this));
@@ -79,9 +81,20 @@ contract AdminProtocol is Ownable{
     function claimCashBack(uint _amount) public{
         token.transferFrom(msg.sender, address(this), _amount);
         //token.transfer(address(0), _amount);
-        //USDT.transfer(msg.sender, _amount);        
+        USDT.transfer(msg.sender, _amount);        
     }
     
+    function calculateUSDPricePerToken(uint256 _amount, address _token) public view returns(uint256){
+        uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
+        return (totalToPay * TAX_TOKEN) / 10 ** 5;      
+    } 
+
+    function calculateQtyTokenClaim(uint256 _amount, address _token) public view returns(uint256){
+        //uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6);     
+        return ((_amount / (10 * 10 ** 18)) * getTokenPriceByChainlink(_token)) / (10 ** 2);               
+                      
+    }   
+
     function getTokenPriceByChainlink(address _token) public view returns (uint256) {
         address priceFeedAddress = tokenPriceFeedMapping[_token];
         AggregatorV3Interface priceFeed = AggregatorV3Interface(
@@ -95,12 +108,7 @@ contract AdminProtocol is Ownable{
             uint80 answeredInRound
         ) = priceFeed.latestRoundData();
         return uint256(price);
-    } 
-
-    function calculateUSDPricePerToken(uint256 _amount, address _token) public view returns(uint256){
-        uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
-        return (totalToPay * TAX_TOKEN) / 10 ** 5;      
-    }   
+    }  
 
     function getInfoStore(uint _id) public view returns(LocalStore memory store){
         return stores[_id];

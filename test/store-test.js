@@ -29,7 +29,7 @@ describe("Store Contract", function () {
     
     
     const setAdminProtocol = ucp.setContractProtocol(adminProtocol.address);
-    await ucp.transfer(deployer.address, 10)
+    //await ucp.transfer(deployer.address, 100000)
     
     const contractAmountPrev = await usdt.balanceOf(localStore.address)
     const deployerAmountPrev = await usdt.balanceOf(deployer.address)
@@ -37,18 +37,17 @@ describe("Store Contract", function () {
     console.log("La cantidad de USDT de la tienda al desplegarse son: " + ethers.utils.formatUnits(contractAmountPrev, "ether") );
     console.log("La cantidad de USDT del deployer son: " + ethers.utils.formatUnits(deployerAmountPrev, "ether"));
 
-
     const resApprove = await usdt.approve(localStore.address, ethers.utils.parseEther('1000000'))
     const allowance = await usdt.allowance(deployer.address, localStore.address)    
 
     console.log("El allowance del contrato es: " + allowance);
     console.log("El contrato store en un inicio tiene UCP: " + await ucp.balanceOf(localStore.address));
-
+    
     //Contract Price Feed USDT Mainnet Etherem
     let chainlinkUSDTContract = "0x3E7d1eAB13ad0104d2750B8863b489D65364e32D";
     //USDT contract Mainnet Etherem
     let USDTContract = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-
+    
     await adminProtocol.addTokenToPriceFeed(USDTContract, chainlinkUSDTContract);
 
     let contractAmount1 = await usdt.balanceOf(localStore.address)
@@ -89,6 +88,16 @@ describe("Store Contract", function () {
 
     let deployerUCPAmount = await ucp.balanceOf(deployer.address);
     console.log("El usuario tiene UCP " + ethers.utils.formatUnits(deployerUCPAmount, "ether"));
+    
+    
+    //let amountToClaim = await adminProtocol.calculateQtyTokenClaim(, USDTContract);
+    let uctQuantity = "10"
+    let uctQuantity2 = "100"
+    let amountToClaim = await adminProtocol.calculateQtyTokenClaim(ethers.utils.parseEther(uctQuantity), USDTContract);
+    let amountToClaim2 = await adminProtocol.calculateQtyTokenClaim(ethers.utils.parseEther(uctQuantity2), USDTContract);
+    console.log("El monto a reclamar en USD x " + uctQuantity + " UCT es: " + ethers.utils.formatUnits(amountToClaim,6));
+    console.log("El monto a reclamar en USD x " + uctQuantity + " UCT es: " + ethers.utils.formatUnits(amountToClaim2,6));
+    //console.log("El monto a reclamar en USD x UCT es: " + ethers.utils.formatUnits(amountToClaim, "ether"));
     //let claimCashBack = await adminProtocol.claimCashBack(1);
     
   });

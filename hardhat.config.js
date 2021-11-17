@@ -32,8 +32,7 @@ module.exports = {
     },
     hardhat:{
       forking: {
-        url: process.env.ALCHEMY_MAINNET_RPC_URL
-        //blockNumber: 11095000
+        url: process.env.ALCHEMY_MAINNET_RPC_URL        
       }
     },
   },
