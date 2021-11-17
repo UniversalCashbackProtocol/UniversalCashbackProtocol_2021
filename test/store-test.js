@@ -25,26 +25,25 @@ describe("Store Contract", function () {
     
     const storeByAdminProtocol = await adminProtocol.createStore("McDonalds");
     const infoStore = await adminProtocol.getInfoStore(1)
-    const localStore = new ethers.Contract(infoStore.contractAddress, JSON.stringify(storeABI))
-    console.log(infoStore.contractAddress)
-    console.log(localStore);
-    /*
+    const localStore = await new ethers.Contract(infoStore.contractAddress, JSON.stringify(storeABI.abi), deployer)    
+    
+    
     const setAdminProtocol = ucp.setContractProtocol(adminProtocol.address);
 
-    const store = await Store.deploy(deployer.address, 1, "McDonalds", usdt.address, ucp.address, adminProtocol.address); 
+    //const store = await Store.deploy(deployer.address, 1, "McDonalds", usdt.address, ucp.address, adminProtocol.address); 
     
-    const contractAmountPrev = await usdt.balanceOf(store.address)
+    const contractAmountPrev = await usdt.balanceOf(localStore.address)
     const deployerAmountPrev = await usdt.balanceOf(deployer.address)
     
     console.log("La cantidad de USDT de la tienda al desplegarse son: " + ethers.utils.formatUnits(contractAmountPrev, "ether") );
     console.log("La cantidad de USDT del deployer son: " + ethers.utils.formatUnits(deployerAmountPrev, "ether"));
 
 
-    const resApprove = await usdt.approve(store.address, ethers.utils.parseEther('1000000'))
-    const allowance = await usdt.allowance(deployer.address, store.address)    
+    const resApprove = await usdt.approve(localStore.address, ethers.utils.parseEther('1000000'))
+    const allowance = await usdt.allowance(deployer.address, localStore.address)    
 
     console.log("El allowance del contrato es: " + allowance);
-    console.log("El contrato store en un inicio tiene UCP: " + await ucp.balanceOf(store.address));
+    console.log("El contrato store en un inicio tiene UCP: " + await ucp.balanceOf(localStore.address));
 
     //Contract Price Feed USDT Mainnet Etherem
     let chainlinkUSDTContract = "0x3E7d1eAB13ad0104d2750B8863b489D65364e32D";
@@ -53,15 +52,15 @@ describe("Store Contract", function () {
 
     await adminProtocol.addTokenToPriceFeed(USDTContract, chainlinkUSDTContract);
 
-    let contractAmount1 = await usdt.balanceOf(store.address)
+    let contractAmount1 = await usdt.balanceOf(localStore.address)
     let deployerAmount1 = await usdt.balanceOf(deployer.address)
-    let finalAllowance1 = await usdt.allowance(deployer.address, store.address)
+    let finalAllowance1 = await usdt.allowance(deployer.address, localStore.address)
 
     contractAmount1 = ethers.utils.formatUnits(contractAmount1, "ether")
     deployerAmount1 = ethers.utils.formatUnits(deployerAmount1, "ether")
     finalAllowance1 = ethers.utils.formatUnits(finalAllowance1, "ether")
 
-    const buy10 = await store.buyToken(ethers.utils.parseEther('10'), USDTContract);
+    const buy10 = await localStore.buyToken(ethers.utils.parseEther('10'), USDTContract);
     //const buy100 = await store.buyToken(ethers.utils.parseEther('100'), USDTContract);
     //const buy1000 = await store.buyToken(ethers.utils.parseEther('1000'), USDTContract);
 
@@ -79,9 +78,9 @@ describe("Store Contract", function () {
     console.log("El precio de USDT es: " + ethers.utils.formatUnits(priceUSDT, 8));
     
     
-    let contractAmount = await usdt.balanceOf(store.address)
+    let contractAmount = await usdt.balanceOf(localStore.address)
     let deployerAmount = await usdt.balanceOf(deployer.address)
-    let finalAllowance = await usdt.allowance(deployer.address, store.address)
+    let finalAllowance = await usdt.allowance(deployer.address, localStore.address)
 
     contractAmount = ethers.utils.formatUnits(contractAmount, "ether")
     deployerAmount = ethers.utils.formatUnits(deployerAmount, "ether")
@@ -91,10 +90,10 @@ describe("Store Contract", function () {
     console.log("La cantidad de USDT del deployer es: " + deployerAmount);
     console.log("El allowance final en USDT es: " + finalAllowance);
 
-    let ucpStoreContract = await ucp.balanceOf(store.address);
+    let ucpStoreContract = await ucp.balanceOf(localStore.address);
 
     console.log("El contrato store AHORA! tiene UCP: " + await ethers.utils.formatUnits(ucpStoreContract, "ether"));
-    */
+    
   });
 
   it.skip("should return valid price", async function(){
