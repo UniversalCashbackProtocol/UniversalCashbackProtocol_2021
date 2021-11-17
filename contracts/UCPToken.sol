@@ -3,10 +3,11 @@ pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./AdminProtocol.sol";
 
-contract UCPToken is ERC20 {
+contract UCPToken is ERC20, Ownable {
 
     ERC20 private USDT;    
     address private CONTRACT_PROTOCOL;
@@ -27,8 +28,14 @@ contract UCPToken is ERC20 {
         return true;
     } 
 
+    function setContractProtocol(address _contractAddress) public onlyOwner returns(bool){
+        require(_contractAddress != address(0), "Addres must be valid");
+        CONTRACT_PROTOCOL = _contractAddress; 
+        return true;
+    }
+
     function setAddressAllowedToMint(address _contractAddress, uint256 _amount) external{
-        require(CONTRACT_PROTOCOL == msg.sender, "Only de Contract Protocol can add Address");
+        require(CONTRACT_PROTOCOL == msg.sender, "Only the Contract Protocol can add Address");
         contractAllowedToMint[_contractAddress] = true;     
         amountAllowedToMint[_contractAddress] = _amount;   
     }
