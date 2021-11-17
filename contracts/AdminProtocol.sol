@@ -75,6 +75,12 @@ contract AdminProtocol is Ownable{
         require(_token != address(0) && priceFeed != address(0), "Must be valid addresses");
         tokenPriceFeedMapping[_token] =  priceFeed;        
     }
+
+    function claimCashBack(uint _amount) public{
+        token.transferFrom(msg.sender, address(this), _amount);
+        //token.transfer(address(0), _amount);
+        //USDT.transfer(msg.sender, _amount);        
+    }
     
     function getTokenPriceByChainlink(address _token) public view returns (uint256) {
         address priceFeedAddress = tokenPriceFeedMapping[_token];
