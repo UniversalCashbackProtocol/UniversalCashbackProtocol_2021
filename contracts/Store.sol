@@ -63,7 +63,7 @@ contract Store{
     
     function buyToken(uint256 _amount, address _token) public {  
         require(_amount >= MINIMUN_TOKEN, "Amount must be greather tan 1");
-        uint256 toPay = protocol.calculateUSDPricePerToken(_amount, _token);                            
+        uint256 toPay = protocol.calculatePricePerToken(_amount, _token);                            
         //Request payment in USDT 
         USDT.transferFrom(msg.sender, address(this), toPay);                          
         protocol.updateAddressesAllowedToMint(_amount, id);

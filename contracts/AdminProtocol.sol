@@ -58,11 +58,13 @@ contract AdminProtocol is Ownable{
         }
     }
 
-    /*
-    function updateAmountAllowedToMint(address _contract, uint256 _amount) external{
-        amountAllowedToMint[_contract] = _amount;
-    }  
-    */      
+    function isValidPriceFeed(address _token) public view returns(bool){
+        if(tokenPriceFeedMapping[_token] != address(0)){
+            return true;
+        }else{
+            return false;
+        }        
+    }
 
     function createStore(string memory _name) public{
         Store cStore = new Store(msg.sender, qtyStores, _name, address(USDT), token, address(this));
@@ -80,17 +82,19 @@ contract AdminProtocol is Ownable{
 
     function claimCashBack(uint _amount) public{
         token.transferFrom(msg.sender, address(this), _amount);
-        //token.transfer(address(0), _amount);
+        token.burn(_amount);
         USDT.transfer(msg.sender, _amount);        
     }
     
-    function calculateUSDPricePerToken(uint256 _amount, address _token) public view returns(uint256){
+    function calculatePricePerToken(uint256 _amount, address _token) public view returns(uint256){
+        require(isValidPriceFeed(_token) == true, "Token is not valid");
         uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
         return (totalToPay * TAX_TOKEN) / 10 ** 5;      
     } 
 
     function calculateQtyTokenClaim(uint256 _amount, address _token) public view returns(uint256){
-        //uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6);     
+        //uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
+        require(isValidPriceFeed(_token) == true, "Token is not valid");    
         return ((_amount / (10 * 10 ** 18)) * getTokenPriceByChainlink(_token)) / (10 ** 2);               
                       
     }   

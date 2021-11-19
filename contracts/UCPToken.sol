@@ -3,11 +3,12 @@ pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./AdminProtocol.sol";
 
-contract UCPToken is ERC20, Ownable {
+contract UCPToken is ERC20, Ownable, ERC20Burnable {
 
     ERC20 private USDT;    
     address private CONTRACT_PROTOCOL;

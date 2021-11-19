@@ -60,7 +60,7 @@ describe("Store Contract", function () {
 
     const buy10 = await localStore.buyToken(ethers.utils.parseEther('10'), USDTContract);
 
-    const pay10 = await adminProtocol.calculateUSDPricePerToken(ethers.utils.parseEther('100'), USDTContract);
+    const pay10 = await adminProtocol.calculatePricePerToken(ethers.utils.parseEther('100'), USDTContract);
 
 
     console.log("El monto en USDT x 10 a pagar es: " + ethers.utils.formatUnits(pay10, 6));

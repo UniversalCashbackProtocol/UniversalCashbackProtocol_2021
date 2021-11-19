@@ -15,5 +15,7 @@ interface IUCPToken{
         uint256 amount
     ) external returns (bool);
 
+    function burn(uint256 amount) external;
+
     event Transfer(address indexed from, address indexed to, uint256 value);
 }
