@@ -10,7 +10,7 @@ const SERVER_URL = "https://dmeeb9p99r9o.usemoralis.com:2053/server"
 ReactDOM.render(
     <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
         <App />
-    </MoralisProvider>,
+    </MoralisProvider>, 
     document.getElementById("root"), 
       
 );
