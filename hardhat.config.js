@@ -22,7 +22,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
  const ALCHEMY_API_KEY = "7E6QZXLKIETo41-wmfK_EbPsWFPBmKKO";
- const ROPSTEN_PRIVATE_KEY = "a5c94a796e80f0b01369ed56ea5a7359a4447ea2a9b67e1c0a9cf11ac62c2995";
+ const ROPSTEN_PRIVATE_KEY = "";
 
 module.exports = {
   defaultNetwork: "hardhat",
