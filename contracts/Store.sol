@@ -22,8 +22,7 @@ contract Store{
 
     struct Promotion{
         uint256 id;
-        uint256 startDate;
-        uint256 endDate;
+        string name;
         bool active;
         uint256 initialTokens;
         uint256 currentTokens;
@@ -41,13 +40,11 @@ contract Store{
         uint idPromotion;
         bool asigned;
     }
-    
-    //mapping(address => address) tokenPriceFeedMapping;
+        
     mapping(uint256 => Product) products;
     mapping(uint256 => Promotion) promotions;    
     mapping(uint256 => mapping(uint256 => ProductAsigned)) productsInPromotions;
-    //mapping(uint256 => ProductAsigned) productsInPromotions;
-    
+        
     constructor(address _owner, uint256 _id, string memory _nameStore, address _usdt, IUCPToken _uct, address _protocol ){
         require(_owner != address(0) && _id > 0, "address must be valid and Id must be equal or greater than zero");
         id = _id;
@@ -61,7 +58,7 @@ contract Store{
         protocol = AdminProtocol(_protocol);
     } 
     
-    function buyToken(uint256 _amount, address _token) public {  
+    function buyToken(uint256 _amount, address _token) internal {  
         require(_amount >= MINIMUN_TOKEN, "Amount must be greather tan 1");
         uint256 toPay = protocol.calculatePricePerToken(_amount, _token);                            
         //Request payment in USDT 
@@ -73,8 +70,9 @@ contract Store{
         USDT.transfer(CONTRACT_PROTOCOL, toPay);     
     }
 
-    function createPromotion(uint _startDate, uint _endDate, uint _initialTokens) isOwner public{
-        promotions[qtyPromotions] = Promotion(qtyPromotions, _startDate, _endDate, true, _initialTokens, _initialTokens);
+    function createPromotion(string memory _name, uint _initialTokens, address _token) isOwner public{
+        promotions[qtyPromotions] = Promotion(qtyPromotions, _name, true, _initialTokens, _initialTokens);
+        buyToken(_initialTokens, _token);
         qtyPromotions++;
     }
     
@@ -107,7 +105,8 @@ contract Store{
         Product memory pd = getProductById(_idProduct);
         Promotion memory pm = getPromotionById(_idPromotion);
         require(pm.currentTokens >= pd.tokenGivens, "The promotion does not have enough UCT to give!");
-        pm.currentTokens -= pd.tokenGivens;
+        promotions[pm.id].currentTokens -= pd.tokenGivens;
+        //pm.currentTokens -= pd.tokenGivens;
         USDT.transferFrom(msg.sender, address(this), pd.price);  
         UCT.transfer(msg.sender, pd.tokenGivens);        
     }  
@@ -128,12 +127,21 @@ contract Store{
     
     function createProduct(string memory _SKU, uint256 _priceProduct, uint256 _tokensPerProduct) isOwner public{
         require(_priceProduct >= 0 && _tokensPerProduct >= 0, "Price product and tokens to be asigned must be equal or greater than zero");
-        products[qtyProducts] = Product(qtyProducts, _SKU, _priceProduct, _tokensPerProduct);
         qtyProducts++;
+        products[qtyProducts] = Product(qtyProducts, _SKU, _priceProduct, _tokensPerProduct);
+        
     }
     
     function owner() public view returns(address){
         return contractOwner;
+    }
+
+    function getQtyProducts() public view returns(uint){
+        return qtyProducts;
+    }
+
+    function getQtyPromotions() public view returns(uint){
+        return qtyPromotions;
     }
     
     modifier isOwner(){

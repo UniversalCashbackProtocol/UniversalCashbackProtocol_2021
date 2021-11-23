@@ -4,7 +4,7 @@ const storeABI = require("../artifacts/contracts/Store.sol/Store.json")
 
 
 describe("Store Contract", function () {
-  it("Should be deployed", async function () {
+  it.skip("Should be deployed", async function () {
     const [deployer] = await ethers.getSigners();
 
     const UCPToken = await hre.ethers.getContractFactory("UCPToken");
@@ -124,5 +124,91 @@ describe("Store Contract", function () {
     const priceFeed = await store.getTokenPriceByChainlink(USDTContract)
     
     console.log("El precio es: " + priceFeed);
+  });
+
+  it("creates new product", async function(){
+    const [deployer] = await ethers.getSigners();
+
+    const UCPToken = await hre.ethers.getContractFactory("UCPToken");
+    const USD = await hre.ethers.getContractFactory("USDT");    
+    const AdminProtocol = await hre.ethers.getContractFactory("AdminProtocol");
+    
+    const usdt = await USD.deploy( ethers.utils.parseEther('100000'));
+    await usdt.deployed();  
+
+    const ucp = await UCPToken.deploy(usdt.address);
+    await ucp.deployed();
+    
+
+    const adminProtocol = await AdminProtocol.deploy(usdt.address, ucp.address);
+    await adminProtocol.deployed();
+
+    
+    const storeByAdminProtocol = await adminProtocol.createStore("Coffe Shop");
+    const infoStore = await adminProtocol.getInfoStore(1)
+    const localStore = await new ethers.Contract(infoStore.contractAddress, JSON.stringify(storeABI.abi), deployer)    
+
+    const resApprove = await usdt.approve(localStore.address, ethers.utils.parseEther('1000000'))
+    let chainlinkUSDTContract = "0x3E7d1eAB13ad0104d2750B8863b489D65364e32D";
+    //USDT contract Mainnet Etherem
+    let USDTContract = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+    
+    await ucp.setContractProtocol(adminProtocol.address)
+    await adminProtocol.addTokenToPriceFeed(usdt.address, chainlinkUSDTContract);
+
+    await localStore.createPromotion("Summer Promotion", ethers.utils.parseEther('10000000'), usdt.address)
+    
+    await localStore.createProduct("Burger", ethers.utils.parseEther('10'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Soda", ethers.utils.parseEther('10'), ethers.utils.parseEther('2'))
+    await localStore.createProduct("Coffe", ethers.utils.parseEther('7'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Donut", ethers.utils.parseEther('2'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Brownie", ethers.utils.parseEther('15'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Pancake", ethers.utils.parseEther('2'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Carrot Cake", ethers.utils.parseEther('5'), ethers.utils.parseEther('1'))
+    await localStore.createProduct("Double Burger", ethers.utils.parseEther('20'), ethers.utils.parseEther('5'))
+    await localStore.createProduct("Cheese Burger", ethers.utils.parseEther('8'), ethers.utils.parseEther('2'))
+
+    console.log("El producto es: " + await localStore.getProductById(1))    
+
+    await localStore.assignProductToPromotion(1, 1)
+    await localStore.assignProductToPromotion(1, 2)
+    await localStore.assignProductToPromotion(1, 3)
+    await localStore.assignProductToPromotion(1, 4)
+    await localStore.assignProductToPromotion(1, 5)
+    await localStore.assignProductToPromotion(1, 6)
+    await localStore.assignProductToPromotion(1, 7)
+    await localStore.assignProductToPromotion(1, 8)
+    await localStore.assignProductToPromotion(1, 9)
+
+    const promotion = await localStore.getPromotionById(1)
+    const usdtBalance = await usdt.balanceOf(deployer.address)
+    const ucpBalance = await ucp.balanceOf(deployer.address)
+
+    console.log("Promotion Inicial: "+ ethers.utils.formatUnits(promotion.initialTokens, 18));
+    console.log("Promotion Inicial 2: "+ ethers.utils.formatUnits(promotion.currentTokens, 18));
+
+    console.log("USDT Balance: "+ ethers.utils.formatUnits(usdtBalance, 18))
+    console.log("UCP Balance: "+ ethers.utils.formatUnits(ucpBalance, 18))
+
+    await localStore.buyProduct(1,1)
+    await localStore.buyProduct(1,2)
+    await localStore.buyProduct(1,3)
+    await localStore.buyProduct(1,4)
+    await localStore.buyProduct(1,5)
+    await localStore.buyProduct(1,6)
+    await localStore.buyProduct(1,7)
+    await localStore.buyProduct(1,8)
+    await localStore.buyProduct(1,9)
+    
+    const promotion2 = await localStore.getPromotionById(1)
+    const usdtBalance2 = await usdt.balanceOf(deployer.address)
+    const ucpBalance2 = await ucp.balanceOf(deployer.address)
+
+    console.log("Promotion Inicial: "+ ethers.utils.formatUnits(promotion2.initialTokens, 18));
+    console.log("Promotion Inicial 2: "+ ethers.utils.formatUnits(promotion2.currentTokens, 18));
+    
+    console.log("USDT Balance: "+ ethers.utils.formatUnits(usdtBalance2, 18))
+    console.log("UCP Balance: "+ ethers.utils.formatUnits(ucpBalance2, 18))
+        
   });
 });

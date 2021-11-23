@@ -3,8 +3,6 @@ import { useMoralis } from "react-moralis";
 
 function CreatePromotion(){
 
-    
-
     useEffect( () => {
         const load = async() => {
           try {

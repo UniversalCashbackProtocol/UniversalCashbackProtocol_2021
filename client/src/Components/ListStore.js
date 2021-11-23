@@ -7,11 +7,11 @@ import ProtocolContext from "../context/ProtocolContext"
 
 function ListStore() {
     const protocolContext = useContext(ProtocolContext)
-    const { w3, adminProtocol, store, ucp, walletAddress} = protocolContext
+    const { w3, adminProtocol, store, ucp, walletAddress, adminProtocolAddress} = protocolContext
     const { Moralis } = useMoralis();
     const [storeQuantity, setStoreQuantity] = useState(0)
     const [mapStores, setMapStore] = useState([])
-    const adminProtocolAddress = "0xb89cd5247A1c05dC9A11300C3D3d0EC0d0e55d41"
+    
     
     const loadStores = async() => {    
         let qty = await adminProtocol.methods.getStoreQuantity().call()

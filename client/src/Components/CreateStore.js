@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useContext, Component, useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import ProtocolContext from "../context/ProtocolContext"
 import AdminProtocol from "../artifacts/contracts/AdminProtocol.sol/AdminProtocol.json"
@@ -6,10 +6,10 @@ require('dotenv').config()
 
 
 function CreateStore() {
-    const {web3, adminProtocol, store, ucp, walletAddress} = ProtocolContext
-    const { Moralis } = useMoralis();
-    const adminProtocolAddress = "0xb89cd5247A1c05dC9A11300C3D3d0EC0d0e55d41"
+    const protocolContext = useContext(ProtocolContext)
+    const {web3, adminProtocol, store, ucp, walletAddress, Moralis, adminProtocolAddress} = protocolContext
 
+    
     const options = {
         contractAddress: adminProtocolAddress,
         functionName: "createStore",
