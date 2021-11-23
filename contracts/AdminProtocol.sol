@@ -76,7 +76,7 @@ contract AdminProtocol is Ownable{
     }
         
     function addTokenToPriceFeed(address _token, address priceFeed)  public onlyOwner{
-        require(_token != address(0) && priceFeed != address(0), "Must be valid addresses");
+        require(_token != address(0) && priceFeed != address(0), "Must be valid address");
         tokenPriceFeedMapping[_token] =  priceFeed;        
     }
 
@@ -124,5 +124,9 @@ contract AdminProtocol is Ownable{
 
     function getAmountAllowedToMint(address _contract) public view returns(uint){
         return amountAllowedToMint[_contract];
+    }
+
+    function getStoreQuantity() public view returns(uint){
+        return qtyStores;
     }
 }

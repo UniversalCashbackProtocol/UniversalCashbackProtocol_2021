@@ -21,18 +21,22 @@ async function main() {
   const UCPToken = await hre.ethers.getContractFactory("UCPToken");
   const USD = await hre.ethers.getContractFactory("USDT");
   const Store = await hre.ethers.getContractFactory("Store");
+  const AdminProtocol = await hre.ethers.getContractFactory("AdminProtocol");
   
-  const usdt = await USD.deploy(10000);
-  await usdt.deployed();
+  const usdt = await USD.deploy( ethers.utils.parseEther('100'));
+  await usdt.deployed();  
 
   const ucp = await UCPToken.deploy(usdt.address);
   await ucp.deployed();
-  const store = await Store.deploy(deployer.address, 1, "McDonalds", ucp.address);  
+  
+
+  const adminProtocol = await AdminProtocol.deploy(usdt.address, ucp.address);
+  await adminProtocol.deployed();
   
 
   console.log("UCP Token deployed to:", ucp.address);
   console.log("USDT Token deployed to:", usdt.address);
-  console.log("Store deployed to:", store.address);
+  console.log("Admin Protocol deployed to:", adminProtocol.address);
   
 }
 
