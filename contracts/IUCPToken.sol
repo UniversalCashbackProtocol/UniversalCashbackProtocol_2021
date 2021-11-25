@@ -18,4 +18,5 @@ interface IUCPToken{
     function burn(uint256 amount) external;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event TokenMinted(uint _amount, address _to);
 }

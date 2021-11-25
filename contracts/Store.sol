@@ -44,7 +44,8 @@ contract Store{
     mapping(uint256 => Product) products;
     mapping(uint256 => Promotion) promotions;    
     mapping(uint256 => mapping(uint256 => ProductAsigned)) productsInPromotions;
-        
+
+       
     constructor(address _owner, uint256 _id, string memory _nameStore, address _usdt, IUCPToken _uct, address _protocol ){
         require(_owner != address(0) && _id > 0, "address must be valid and Id must be equal or greater than zero");
         id = _id;
@@ -60,13 +61,10 @@ contract Store{
     
     function buyToken(uint256 _amount, address _token) internal {  
         require(_amount >= MINIMUN_TOKEN, "Amount must be greather tan 1");
-        uint256 toPay = protocol.calculatePricePerToken(_amount, _token);                            
-        //Request payment in USDT 
+        uint256 toPay = protocol.calculatePricePerToken(_amount, _token);                                    
         USDT.transferFrom(msg.sender, address(this), toPay);                          
-        protocol.updateAddressesAllowedToMint(_amount, id);
-        //Mint tokens
-        UCT.mintToken(_amount); 
-        //Transfer the USDT tokens to Admin Protocol Contract
+        protocol.updateAddressesAllowedToMint(_amount, id);        
+        UCT.mintToken(_amount);         
         USDT.transfer(CONTRACT_PROTOCOL, toPay);     
     }
 
@@ -74,6 +72,7 @@ contract Store{
         promotions[qtyPromotions] = Promotion(qtyPromotions, _name, true, _initialTokens, _initialTokens);
         buyToken(_initialTokens, _token);
         qtyPromotions++;
+        emit PromotionCreated(_name, _initialTokens);
     }
     
     function assignProductToPromotion(uint _idPromotion, uint _idProduct) isOwner public{
@@ -82,11 +81,13 @@ contract Store{
         Product memory prod = getProductById(_idProduct);        
         productsInPromotions[_idPromotion][_idProduct] = ProductAsigned(prod.id, prom.id, true);        
         counterProductsAsigned++;
+        emit ProductAsignedEvent(_idPromotion, _idProduct);
     }
     
     function unAssignProductToPromotion(uint _idPromotion, uint _idProduct) isOwner public{        
         require(isProductAsigned(_idProduct, _idPromotion) == true, "Product has not been asigned");
         productsInPromotions[_idPromotion][_idProduct] = ProductAsigned(_idProduct, _idPromotion, false);
+        emit ProductUnasignedEvent(_idPromotion, _idProduct);(_idPromotion, _idProduct);
     }
 
     function isProductAsigned(uint _idPromotion, uint _idProduct) internal view returns(bool){
@@ -107,7 +108,8 @@ contract Store{
         require(pm.currentTokens >= pd.tokenGivens, "The promotion does not have enough UCT to give!");
         promotions[pm.id].currentTokens -= pd.tokenGivens;
         USDT.transferFrom(msg.sender, address(this), pd.price);  
-        UCT.transfer(msg.sender, pd.tokenGivens);        
+        UCT.transfer(msg.sender, pd.tokenGivens);   
+        emit ProductBought(_idPromotion, _idProduct);     
     }  
     
     function getPromotionById(uint256 _id) public view returns (Promotion memory){
@@ -127,8 +129,23 @@ contract Store{
     function createProduct(string memory _SKU, uint256 _priceProduct, uint256 _tokensPerProduct) isOwner public{
         require(_priceProduct >= 0 && _tokensPerProduct >= 0, "Price product and tokens to be asigned must be equal or greater than zero");
         qtyProducts++;
-        products[qtyProducts] = Product(qtyProducts, _SKU, _priceProduct, _tokensPerProduct);
-        
+        products[qtyProducts] = Product(qtyProducts, _SKU, _priceProduct, _tokensPerProduct);        
+    }
+
+    function withdrawTokensFromPromotion(uint _amount, uint _idPromotion) isOwner public{
+        require(validateEnoughTokensToWithdraw(_amount, _idPromotion) == true, "Amount exceed current tokens");
+         promotions[_idPromotion].currentTokens -= _amount;
+         UCT.transfer(msg.sender, _amount);
+         emit WithdrawTokensFromPromo(_idPromotion, _amount);
+    }
+
+    function validateEnoughTokensToWithdraw(uint _amount, uint _idPromotion) internal view returns(bool){
+        Promotion memory p = getPromotionById(_idPromotion);
+        if(promotions[p.id].currentTokens >= _amount){
+            return true;
+        }else{
+            return false;
+        }        
     }
     
     function owner() public view returns(address){
@@ -147,4 +164,10 @@ contract Store{
         require(msg.sender == contractOwner);
         _;
     }
+
+    event PromotionCreated(string _name, uint _tokensToGive);
+    event ProductAsignedEvent(uint _idPromotion, uint _idProduct);    
+    event ProductUnasignedEvent(uint _idPromotion, uint _idProduct);
+    event ProductBought(uint _idPromotion, uint _idProduct);
+    event WithdrawTokensFromPromo(uint _idPromotion, uint _amount);
 }

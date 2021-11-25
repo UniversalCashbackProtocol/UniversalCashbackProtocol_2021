@@ -41,6 +41,9 @@ contract AdminProtocol is Ownable{
         token = IUCPToken(_token);
     }
 
+    event storeCreated(address _address, string _name, address _owner);
+    event tokenClaimed(uint _amount, address _claimer);
+
     function updateAddressesAllowedToMint(uint256 _amount, uint _idStore) external {   
         require(_amount > MINIMUN_TOKEN, "Amount must be greater or equal than one");  
         require(isValidStore(_idStore, msg.sender), "Only valid store can update");       
@@ -74,6 +77,7 @@ contract AdminProtocol is Ownable{
         stores[qtyStores] = localStore;
         storesByOwner[msg.sender][qtyStores] = localStore;
         qtyStores++;
+        emit storeCreated(address(cStore), _name, msg.sender);
     }
         
     function addTokenToPriceFeed(address _token, address priceFeed)  public onlyOwner{
@@ -84,18 +88,18 @@ contract AdminProtocol is Ownable{
     function claimCashBack(uint _amount) public{
         token.transferFrom(msg.sender, address(this), _amount);
         token.burn(_amount);
-        USDT.transfer(msg.sender, convertSixteenToCustomDecimals(_amount, USDT_DECIMALS));        
+        USDT.transfer(msg.sender, convertSixteenToCustomDecimals(_amount, USDT_DECIMALS));
+        emit tokenClaimed(_amount, msg.sender);        
     }
     
     function calculatePricePerToken(uint256 _amount, address _token) public view returns(uint256){
-        require(isValidPriceFeed(_token) == true, "Token is not valid");
+        require(isValidPriceFeed(_token) == true, "Token is invalid to calculate price feed");
         uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
         return (totalToPay * TAX_TOKEN) / 10 ** 5;      
     } 
 
-    function calculateQtyTokenClaim(uint256 _amount, address _token) public view returns(uint256){
-        //uint256 totalToPay =  (((_amount / 10) / (10 ** (18 - 6))) * (getTokenPriceByChainlink(_token) / (10 ** 2))) / (10 ** 6); 
-        require(isValidPriceFeed(_token) == true, "Token is not valid");    
+    function calculateQtyTokenClaim(uint256 _amount, address _token) public view returns(uint256){        
+        require(isValidPriceFeed(_token) == true, "Token is invalid to calculate token claim");    
         return ((_amount / (10 * 10 ** 18)) * getTokenPriceByChainlink(_token)) / (10 ** 2);               
                       
     }   

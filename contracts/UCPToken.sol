@@ -27,7 +27,8 @@ contract UCPToken is ERC20, Ownable, ERC20Burnable {
         //Reset amount allowed to mint        
         amountAllowedToMint[msg.sender] = 0;   
         _mint(msg.sender, _amount);
-        return true;
+        emit TokenMinted(_amount, msg.sender);
+        return true;        
     } 
 
     function setContractProtocol(address _contractAddress) public onlyOwner returns(bool){
@@ -51,4 +52,6 @@ contract UCPToken is ERC20, Ownable, ERC20Burnable {
         contractAllowedToMint[_contractAddress];
         return true;
     }  
+
+    event TokenMinted(uint _amount, address _to);
 }
