@@ -17,27 +17,33 @@ async function main() {
   console.log("El owner es" + deployer.address)
 
   // We get the contract to deploy
-  
+  let chainlinkUSDTContract = "0x9211c6b3BF41A10F78539810Cf5c64e1BB78Ec60";
+  let USDTContractAddress = "0x13512979ADE267AB5100878E2e0f485B568328a4";
+
   const UCPToken = await hre.ethers.getContractFactory("UCPToken");
-  const USD = await hre.ethers.getContractFactory("USDT");
+  //const USD = await hre.ethers.getContractFactory("USDT");
   const Store = await hre.ethers.getContractFactory("Store");
   const AdminProtocol = await hre.ethers.getContractFactory("AdminProtocol");
   
-  const usdt = await USD.deploy( ethers.utils.parseEther('100'));
-  await usdt.deployed();  
+  //const usdt = await USD.deploy( ethers.utils.parseEther('100'));
+  //await usdt.deployed();  
 
-  const ucp = await UCPToken.deploy(usdt.address);
+  //const ucp = await UCPToken.deploy(usdt.address);
+  const ucp = await UCPToken.deploy(USDTContractAddress);
   await ucp.deployed();
   
 
-  const adminProtocol = await AdminProtocol.deploy(usdt.address, ucp.address);
+  //const adminProtocol = await AdminProtocol.deploy(usdt.address, ucp.address);
+  const adminProtocol = await AdminProtocol.deploy(USDTContractAddress, ucp.address);
   await adminProtocol.deployed();
   
 
   console.log("UCP Token deployed to:", ucp.address);
-  console.log("USDT Token deployed to:", usdt.address);
+  //console.log("USDT Token deployed to:", usdt.address);
   console.log("Admin Protocol deployed to:", adminProtocol.address);
   
+
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

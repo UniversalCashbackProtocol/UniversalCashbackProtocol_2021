@@ -9,7 +9,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract AdminProtocol is Ownable{
     uint private qtyStores;
     uint immutable private TAX_TOKEN = 103000;
-    uint256 immutable private MINIMUN_TOKEN = 1 * 10 ** 18;   
+    uint immutable private MINIMUN_TOKEN = 1 * 10 ** 18;   
+    uint8 immutable private USDT_DECIMALS = 6;
     address private UCP;
     IERC20 private USDT;
     IUCPToken private token;
@@ -83,7 +84,7 @@ contract AdminProtocol is Ownable{
     function claimCashBack(uint _amount) public{
         token.transferFrom(msg.sender, address(this), _amount);
         token.burn(_amount);
-        USDT.transfer(msg.sender, _amount);        
+        USDT.transfer(msg.sender, convertSixteenToCustomDecimals(_amount, USDT_DECIMALS));        
     }
     
     function calculatePricePerToken(uint256 _amount, address _token) public view returns(uint256){
@@ -128,5 +129,9 @@ contract AdminProtocol is Ownable{
 
     function getStoreQuantity() public view returns(uint){
         return qtyStores;
+    }
+
+    function convertSixteenToCustomDecimals(uint256 _amount, uint8 decimals) internal pure returns(uint256){
+        return _amount / (10 ** decimals);
     }
 }

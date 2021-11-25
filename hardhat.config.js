@@ -24,6 +24,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  const ALCHEMY_API_KEY = "";
  const ROPSTEN_PRIVATE_KEY = "";
 
+
 module.exports = {
   defaultNetwork: "hardhat",
   solidity: "0.8.0",
@@ -31,13 +32,17 @@ module.exports = {
     kovan: {
       url: `https://eth-kovan.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts:
-      [`0x${ROPSTEN_PRIVATE_KEY}`]
+      [`0x${ROPSTEN_PRIVATE_KEY}`],
+      gasPrice: 'auto'
     },
     hardhat:{
       forking: {
         url: process.env.ALCHEMY_MAINNET_RPC_URL        
       }
     },
+  },
+  etherscan: {
+    apiKey: "ABC123ABC123ABC123ABC123ABC123ABC1"
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

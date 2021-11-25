@@ -106,7 +106,6 @@ contract Store{
         Promotion memory pm = getPromotionById(_idPromotion);
         require(pm.currentTokens >= pd.tokenGivens, "The promotion does not have enough UCT to give!");
         promotions[pm.id].currentTokens -= pd.tokenGivens;
-        //pm.currentTokens -= pd.tokenGivens;
         USDT.transferFrom(msg.sender, address(this), pd.price);  
         UCT.transfer(msg.sender, pd.tokenGivens);        
     }  

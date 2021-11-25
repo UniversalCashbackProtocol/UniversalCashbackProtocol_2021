@@ -7,3 +7,7 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+scripts
+test
+hardhat-config.js
