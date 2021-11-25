@@ -16,9 +16,8 @@ contract UCPToken is ERC20, Ownable, ERC20Burnable {
     mapping(address => bool) contractAllowedToMint;
     mapping(address => uint) amountAllowedToMint;
 
-    constructor(address _USDT) ERC20("Cashback", "UCP") {
-        USDT = ERC20(_USDT);     
-        _mint(msg.sender, 1000000000000000000000000000);
+    constructor(address _USDT) ERC20("Universal Cashback", "UCP") {
+        USDT = ERC20(_USDT);             
     }
 
     function mintToken(uint256 _amount) external virtual returns(bool){

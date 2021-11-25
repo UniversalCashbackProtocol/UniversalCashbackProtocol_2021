@@ -11,3 +11,4 @@ artifacts
 scripts
 test
 hardhat-config.js
+secret-data.json
