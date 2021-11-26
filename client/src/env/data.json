@@ -1,0 +1,18 @@
+
+{
+    "contracts": {
+        "UCP": {
+            "address": "0xd1DcAa78da0524380D51d292B263103a1345b5Cc"
+        },
+        "AdminProtocol": {
+            "address": "0xe576E059A37122b7BD451592686584214d5a9DEb"
+        },
+        "Store": {
+            "address": "0xD5E1Fd49C8Cac19bf83FeDB856c6a80Ac4f10487"
+        },
+        "USDT": {
+            "address": "0xbd21a10f619be90d6066c941b04e340841f1f989"
+        }
+    }
+}
+

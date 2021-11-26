@@ -159,6 +159,10 @@ contract Store{
     function getQtyPromotions() public view returns(uint){
         return qtyPromotions;
     }
+
+    function getProductsInPromotion(uint _idPromotion, uint _idProduct) public view returns(ProductAsigned memory){
+        return productsInPromotions[_idPromotion][_idProduct];
+    }
     
     modifier isOwner(){
         require(msg.sender == contractOwner);

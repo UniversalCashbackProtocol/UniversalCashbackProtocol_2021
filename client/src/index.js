@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import { MoralisProvider } from "react-moralis";
 
-const APP_ID = "A4OGKY8aZQBm4NwxDwhcPjwLADKWBYZJWJKWe0pH"
-const SERVER_URL = "https://8nfjwefzngtg.usemoralis.com:2053/server"
+const APP_ID = "QCv3F3K5IvIVP05oN6RNLUhXFJmAD9CAl09ge0Oo"
+const SERVER_URL = "https://nrdzlizkmtj3.usemoralis.com:2053/server"
 
 ReactDOM.render(
     <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>

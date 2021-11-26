@@ -7,7 +7,7 @@ import ProtocolContext from "../context/ProtocolContext"
 
 function ListStore() {
     const protocolContext = useContext(ProtocolContext)
-    const { w3, adminProtocol, store, ucp, walletAddress, adminProtocolAddress} = protocolContext
+    const { w3, adminProtocol, store, ucp, walletAddress} = protocolContext
     const { Moralis } = useMoralis();
     const [storeQuantity, setStoreQuantity] = useState(0)
     const [mapStores, setMapStore] = useState([])

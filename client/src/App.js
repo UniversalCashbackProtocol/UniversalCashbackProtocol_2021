@@ -6,21 +6,32 @@ import CreatePromotion from "./Components/CreatePromotion"
 import AdminProtocol from "./artifacts/contracts/AdminProtocol.sol/AdminProtocol.json"
 import Store from "./artifacts/contracts/Store.sol/Store.json"
 import UCP from "./artifacts/contracts/UCPToken.sol/UCPToken.json"
+import USDT from "./artifacts/contracts/USDT.sol/USDT.json"
+ 
 
 import "./App.css";
 import ProtocolContext from "./context/ProtocolContext";
 import ListStore from "./Components/ListStore";
 import CreateProduct from "./Components/CreateProduct"
+import BuyProduct from "./Components/BuyProduct"
+const { contracts } = require ('./env/data.json')
 
 
 function App() {
+  const adminProtocolAddress = contracts.AdminProtocol.address
+  const storeAddress = contracts.Store.address
+  const ucpAddress = contracts.UCP.address
+  const usdtAddress = contracts.USDT.address
+
   const { Moralis, authenticate, isAuthenticated, user } = useMoralis();
   const { web3, enableWeb3, isWeb3Enabled, isWeb3EnableLoading, web3EnableError } = useMoralis()
   const [ adminProtocol, setAdminProtocol] = useState(undefined);  
+  const [ store, setStore ] = useState(undefined);
   const [ ucp, setUCP ] = useState(undefined);
+  const [ usdt, setUSDT ] = useState(undefined);
   const [ walletAddress, setWalletAddress] = useState(undefined)
   const [ w3, setW3] = useState(undefined)
-  const [ adminProtocolAddress, setAdminProtocolAddress] = useState("0xdDEEEbed3d2B4adC38DC0b1Dbf9b5eBaBCd568BD")
+  
 
   useEffect(() => {
     Moralis.onAccountsChanged(function(address){
@@ -29,7 +40,7 @@ function App() {
   });
 
   useEffect(
-    () => setWalletAddress(web3.givenProvider.selectedAddress || user.get("ethAddress")),
+    () => setWalletAddress(web3.givenProvider.selectedAddress),
     [web3, user]
   )
   
@@ -39,11 +50,15 @@ function App() {
           
           const wb3 = await Moralis.enableWeb3()
                           
-          const protocolContract = new wb3.eth.Contract(AdminProtocol.abi, adminProtocolAddress);          
-          const ucpContract = new wb3.eth.Contract(UCP.abi, UCP.address);
+          const protocolContract = new wb3.eth.Contract(AdminProtocol.abi, adminProtocolAddress);      
+          const storeContract = new wb3.eth.Contract(Store.abi, storeAddress);    
+          const ucpContract = new wb3.eth.Contract(UCP.abi, ucpAddress);          
+          const usdtContract = new wb3.eth.Contract(USDT.abi, usdtAddress);          
           
-          setAdminProtocol(protocolContract)          
+          setAdminProtocol(protocolContract)                    
+          setStore(storeContract)
           setUCP(ucpContract)
+          setUSDT(usdtContract)
           setW3(wb3)
           
         } catch (error) {
@@ -55,27 +70,28 @@ function App() {
       init();
   }, []);
 
-  if(typeof adminProtocol === 'undefined' ){
-   
+  if((typeof store === 'undefined') 
+        || (typeof adminProtocol === 'undefined') 
+        || (typeof ucp === 'undefined')
+        || (typeof usdt === 'undefined') )
+  {   
     return <div>Loading Web3, accounts, and contract...</div>;
   }
   if (!isAuthenticated && !isWeb3Enabled) {
     return (
       <div>
-        <button onClick={() => authenticate()}>Authenticate</button>
+        <button onClick={() => authenticate()}>Authenticate into the Protocol</button>
       </div>
     );
   }
   return (
-    <ProtocolContext.Provider value={{w3, adminProtocol, ucp, walletAddress, Moralis, adminProtocolAddress}}>
+    <ProtocolContext.Provider value={{w3, adminProtocol, ucp, store, usdt, walletAddress, Moralis }}>
     <div className="container">
       <div>
         <h1>Account: {walletAddress}</h1>               
       </div>
-      <div>
-        <CreateStore />        
-        <ListStore />
-        <CreateProduct />
+      <div>     
+        <BuyProduct />
       </div>
     </div>
     </ProtocolContext.Provider>
