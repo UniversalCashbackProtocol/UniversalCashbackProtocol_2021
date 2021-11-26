@@ -88,7 +88,7 @@ contract AdminProtocol is Ownable{
     function claimCashBack(uint _amount) public{
         token.transferFrom(msg.sender, address(this), _amount);
         token.burn(_amount);
-        USDT.transfer(msg.sender, convertSixteenToCustomDecimals(_amount, USDT_DECIMALS));
+        USDT.transfer(msg.sender, convertSixteenToCustomDecimals(_amount, USDT_DECIMALS) / 10);
         emit tokenClaimed(_amount, msg.sender);        
     }
     
