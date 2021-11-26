@@ -135,7 +135,7 @@ contract AdminProtocol is Ownable{
         return qtyStores;
     }
 
-    function convertSixteenToCustomDecimals(uint256 _amount, uint8 decimals) internal pure returns(uint256){
-        return _amount / (10 ** decimals);
+    function convertSixteenToCustomDecimals(uint256 _amount, uint8 decimals) internal pure returns(uint256){        
+        return _amount / (10 ** (18 - decimals));
     }
 }
