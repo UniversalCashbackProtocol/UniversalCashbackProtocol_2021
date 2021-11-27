@@ -1,24 +1,33 @@
-## First Version Universal Cashback Protocol
+## Universal Cashback Protocol
 
-![](https://raw.githubusercontent.com/UniversalCashbackProtocol/UniversalCashbackProtocol_2022/0061fc5f174d13f99a0d6bfaecae6b874129a30d/src/assets/logos/logo_ucp_officialsvg.svg)
+**What is the Universal Cashback Protocol?**
+
+Universal Cashback Protocol was born as a decentralized solution for the cashback service using smart contracts, without intermediaries, using UCP (Universal Cashback Protocol) as token.
+The initial proposal developed works as follows: 
+Affiliate companies can generate rewards with UCP tokens for the purchase of products, by accumulating UCP for purchases, it allows the user to exchange UCP tokens for USDT and buy more products.
 
 
-### System Diagram
-                    
-```mermaid
-graph LR
-A[Hard edge] -->B(Round edge)
-    B --> C{Decision}
-    C -->|One| D[Result one]
-    C -->|Two| E[Result two]
-```
+**General objectives:**
 
-```sequence
-Costumer->Company: Buy Product (USDT)
-Costumer->Company: Input
-Note left of Costumer: Smart Contracts
-Note right of Company: Chainlink, MATIC, Alchemy & Moralis
-Company->Costumer: Output
-Company-->Costumer: token UCP 
-Costumer->>Company: Claim Cashback
-```
+
+•	Promote the inclusion of people without technical knowledge in the Crypto economy through granting Cashback benefits in a simple way.
+
+•	Adopt Blockchain technology in everyday use cases.
+
+•	Expose to the general population the benefits and options obtained from decentralization.
+
+**What does this project contribute to the community?**
+
+We believe that everyone wins: The idea is that more people can approach the ecosystem of Blockchain and cryptocurrencies in a more friendly way. And all people make purchases of different products on a daily basis.
+Consumers: they will be happy to make a profit on their purchases.
+Companies: we provide the tools for a simple cashback process avoiding bureaucracy and technical knowledge.
+It may sound utopian, but we believe that with this project we are contributing to build freedom, and for us that is priceless.
+
+**Actual infrastructure:**
+
+![](https://i.imgur.com/VbWAzIu.png)
+
+### Link to full documentation:
+
+`<link>` : <https://github.com/UniversalCashbackProtocol>
+
