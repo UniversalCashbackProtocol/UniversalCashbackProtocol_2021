@@ -25,7 +25,7 @@ It may sound utopian, but we believe that with this project we are contributing 
 
 **Actual infrastructure:**
 
-![](https://i.imgur.com/VbWAzIu.png)
+![](https://user-images.githubusercontent.com/94859113/143722304-e3edd3db-c1e1-4a72-acfe-f6220ddc30ff.jpg)
 
 ### Link to full documentation:
 
