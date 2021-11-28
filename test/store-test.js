@@ -79,13 +79,13 @@ describe("Store Contract", function () {
     deployerAmount = ethers.utils.formatUnits(deployerAmount, "ether")
     finalAllowance = ethers.utils.formatUnits(finalAllowance, "ether")
     
-    console.log("La cantidad de USDT del contrato admin protocol es: " + contractAmount);
-    console.log("La cantidad de USDT del deployer es: " + deployerAmount);
-    console.log("El allowance final en USDT es: " + finalAllowance);
+    console.log("The amount of USDT of the store when displayed are:" + contractAmount);
+    console.log("The USDT amount of the deployer is: " + deployerAmount);
+    console.log("The final allowance in USDT is:" + finalAllowance);
 
     let ucpStoreContract = await ucp.balanceOf(localStore.address);
 
-    console.log("El contrato store AHORA! tiene UCP: " + await ethers.utils.formatUnits(ucpStoreContract, "ether"));
+    console.log("The store NOW! Contract has UCP: " + await ethers.utils.formatUnits(ucpStoreContract, "ether"));
 
     let deployerUCPAmount = await ucp.balanceOf(deployer.address);
     console.log("El usuario tiene UCP " + ethers.utils.formatUnits(deployerUCPAmount, "ether"));
@@ -96,8 +96,8 @@ describe("Store Contract", function () {
     let uctQuantity2 = "100"
     let amountToClaim = await adminProtocol.calculateQtyTokenClaim(ethers.utils.parseEther(uctQuantity), USDTContract);
     let amountToClaim2 = await adminProtocol.calculateQtyTokenClaim(ethers.utils.parseEther(uctQuantity2), USDTContract);
-    console.log("El monto a reclamar en USD x " + uctQuantity + " UCT es: " + ethers.utils.formatUnits(amountToClaim,6));
-    console.log("El monto a reclamar en USD x " + uctQuantity + " UCT es: " + ethers.utils.formatUnits(amountToClaim2,6));
+    console.log("The amount to claim in USD x " + uctQuantity + " UCT is: " + ethers.utils.formatUnits(amountToClaim,6));
+    console.log("The amount to claim in USD x " + uctQuantity + " UCT is: " + ethers.utils.formatUnits(amountToClaim2,6));
     //console.log("El monto a reclamar en USD x UCT es: " + ethers.utils.formatUnits(amountToClaim, "ether"));
     //let claimCashBack = await adminProtocol.claimCashBack(1);
     
