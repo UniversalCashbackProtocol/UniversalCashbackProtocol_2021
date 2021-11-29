@@ -1,23 +1,32 @@
 ## Universal Cashback Protocol
+
 https://user-images.githubusercontent.com/85961824/143723368-182ae4c4-2ffe-4463-852b-30a1c3990f41.mp4
+
+**Previous steps to test the protocol:**
+
+1. Add and configure mumbai-testnet in your metamask wallet https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask/
+2. Order MATIC tokens from faucet polygon https://faucet.polygon.technology/
+3. Order AAVE faucet USDT tokens https://staging.aave.com/#/faucet
+4. Add the UCP token contract to our metamask 
+5. Enter the site https://nrdzlizkmtj3.usemoralis.com/ and connect metamask in the mumbai network
+6. Select any of the available products and accept the transaction
+7. After accumulating the UCP tokens, at the bottom of the page, place the amount of UCP you want to exchange for USDT and claim cashback.
+
+**Deployed to:**
+
 ```javascript
 {
     "contracts": {
-        "UCP": {
-            "address": "0x1c182A3c6f9356369186f06C22099Da306946Fe6"
+        "UCP  token": {
+            "address": "0xe09Ac263dF9d2Ce7af79934fD3119dc14E6f5278"
         },
         "AdminProtocol": {
-            "address": "0xEBfE5590bf4181D18309E711a1A3B117Aa914D1c"
+            "address": "0xF6d56d8D1de9994837144235F129bf11128FDA9A"
         },
-        "Store": {
-            "address": "0x49A582096b380c89a6978e5Ba4c8eF5792D6bd91"
-        },
-        "USDT": {
-            "address": "0xbd21a10f619be90d6066c941b04e340841f1f989"
-        }
     }
 }
 ```
+
 **What is the Universal Cashback Protocol?**
 
 Universal Cashback Protocol was born as a decentralized solution for the cashback service using smart contracts, without intermediaries, using UCP (Universal Cashback Protocol) as token.
@@ -118,7 +127,7 @@ It may sound utopian, but we believe that with this project we are contributing 
     await localStore.createProduct("Double Burger", ethers.utils.parseEther('20'), ethers.utils.parseEther('5'))
     await localStore.createProduct("Cheese Burger", ethers.utils.parseEther('8'), ethers.utils.parseEther('2'))
 
-    console.log("El producto es: " + await localStore.getProductById(1)) 
+    console.log("The Prodct is: " + await localStore.getProductById(1)) 
  ```
  **Create New Product:**
  ```solidity
